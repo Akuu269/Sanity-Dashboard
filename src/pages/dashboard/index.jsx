@@ -13,13 +13,16 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 // project import
+import React, { useState } from 'react';
 import MainCard from 'components/MainCard';
 import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 import NightlyBarChart from './NightlyBarChart';
-import CDETSAreaChart from './CDETSAreaChart';
 import PipelineHealth from './PipelineHealth';
 import CommitSanityTable from './CommitSanityTable';
 import PipelineHealthTable from './PipelineHealthTable';
+import PipelineHealthEmoji from './PipelineHealthEmoji';
+import determineHealthState from './determineHealthState';
+import CDETSAreaChart, { BugStatisticsButton } from './CDETSAreaChart';
 
 // assets
 import GiftOutlined from '@ant-design/icons/GiftOutlined';
@@ -51,6 +54,12 @@ const actionSX = {
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 export default function DashboardDefault() {
+  const pipelineIssues = 20; // This would be dynamically determined in a real scenario
+  const commitFailures = 0; // Example: Replace with actual logic to determine the number of commit failures
+  const nightlyFailures = 10
+  const healthState = determineHealthState(pipelineIssues);
+  const [range, setRange] = useState('month');
+
   return (
     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
 
@@ -59,49 +68,50 @@ export default function DashboardDefault() {
       <Grid item xs={12} sx={{ mb: -2.25 }}>
         <Typography variant="h5">Sanity Performance Dashboard</Typography>
       </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Total CI/CD Pipeline Issues" count="236" percentage={7.8} isLoss color="warning" extra="5" />
+     <Grid item xs={12} sm={6} md={4} lg={4}>
+        <AnalyticEcommerce
+          title={
+            <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'black' }}>
+              Today's Pipeline Health
+            </Typography>
+          }
+          count="13"
+          extra="5"
+          emoji={<PipelineHealthEmoji pipelineIssues={pipelineIssues} />} // Pass emoji based on pipeline issues
+        />
       </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Total Commit Failuer " count="250" percentage={70.5} isLoss color="warning" extra="19" />
+      <Grid item xs={12} sm={6} md={4} lg={4}>
+        <AnalyticEcommerce
+          title={
+            <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'black' }}>
+              "Today's  Commit Failure"
+            </Typography>
+          }
+          count="5"
+          extra="1"
+          emoji={<PipelineHealthEmoji pipelineIssues={commitFailures} />} // Reuse emoji for commit failures
+        />
       </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Total Nightly Failure" count="80" percentage={27.4} isLoss color="warning" extra="13" />
+
+      <Grid item xs={12} sm={6} md={4} lg={4}>
+        <AnalyticEcommerce
+          title={
+            <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'black' }}>
+              "Today's Nightly Failure"
+            </Typography>
+          }
+          count="8"
+          extra="1"
+          emoji={<PipelineHealthEmoji pipelineIssues={nightlyFailures} />} // Reuse emoji for nightly failures
+        />
       </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3}>
+      {/* <Grid item xs={12} sm={6} md={4} lg={3}>
         <AnalyticEcommerce title="Total open Bugs" count="78" percentage={27.4}  extra="5" />
-      </Grid>
-
-      <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
-
-      {/* row 2 */}
-
-
-      {/* <Grid item xs={12} md={7} lg={8}>
-        <UniqueVisitorCard />
-      </Grid>
-      <Grid item xs={12} md={5} lg={4}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h5">Nightly Status</Typography>
-          </Grid>
-          <Grid item />
-        </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
-          <Box sx={{ p: 3, pb: 0 }}>
-            <Stack spacing={2}>
-              <Typography variant="h6" color="text.secondary">
-                Today's Nightly Statistics
-              </Typography>
-              <Typography variant="h6">Total Pass : 150</Typography>
-              <Typography variant="h6">Total Failed : 50</Typography>
-            </Stack>
-          </Box>
-          <MonthlyBarChart />
-        </MainCard>
       </Grid> */}
 
+      {/* <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} /> */}
 
+      {/* row 2 */}
 
       <Grid item xs={12} md={7} lg={8}>
         <PipelineHealth />
@@ -139,27 +149,29 @@ export default function DashboardDefault() {
         </MainCard>
       </Grid>
 
-
-
       {/* row 3 */}
 
-      <Grid item xs={12} md={7} lg={8}>
+      <Grid item xs={12} md={7} lg={8} sx={{ mt: -79 }}> {/* Adjust or remove top margin */}
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Top Issues Impacting Pipeline Health</Typography>
           </Grid>
           <Grid item />
         </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
+        <MainCard sx={{ mt: 2 }} content={false}> {/* Adjust top margin as needed */}
           <PipelineHealthTable />
         </MainCard>
       </Grid>
+
       <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">CDETS Reports</Typography>
           </Grid>
-          <Grid item />
+          <Grid item>
+            {/* Integrating BugStatisticsButton here */}
+            <BugStatisticsButton range={range} setRange={setRange} />
+          </Grid>
         </Grid>
         <MainCard sx={{ mt: 2 }} content={false}>
           <List sx={{ p: 0, '& .MuiListItemButton-root': { py: 2 } }}>
@@ -176,23 +188,23 @@ export default function DashboardDefault() {
               <Typography variant="h5">20</Typography>
             </ListItemButton>
           </List>
-          <CDETSAreaChart/>
+          <CDETSAreaChart range={range} />
         </MainCard>
       </Grid>
-
+    
       {/* row 4 */}
 
       <Grid item xs={12} md={7} lg={8}>
         <CommitSanityTable />
       </Grid>
       <Grid item xs={12} md={5} lg={4}>
-        <Grid container alignItems="center" justifyContent="space-between">
+        {/* <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Open Top Sanity Issue</Typography>
           </Grid>
           <Grid item />
-        </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
+        </Grid> */}
+        {/* <MainCard sx={{ mt: 2 }} content={false}>
           <List
             component="nav"
             sx={{
@@ -260,8 +272,8 @@ export default function DashboardDefault() {
               </ListItemSecondaryAction>
             </ListItemButton>
           </List>
-        </MainCard>
-        <MainCard sx={{ mt: 2 }}>
+        </MainCard> */}
+        <MainCard sx={{ mt: 10 }}>
           <Stack spacing={3}>
             <Grid container justifyContent="space-between" alignItems="center">
               <Grid item>

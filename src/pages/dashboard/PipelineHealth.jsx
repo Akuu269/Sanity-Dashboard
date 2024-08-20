@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 
 // project import
 import MainCard from 'components/MainCard';
-import PipelineHealthChart from './PipelineHealthChart';
+// import PipelineHealthChart from './PipelineHealthChart';
 
 // ==============================|| DEFAULT - UNIQUE VISITOR ||============================== //
 
@@ -18,7 +18,7 @@ export default function PipelineHealth() {
 
   return (
     <>
-      <Grid container alignItems="center" justifyContent="space-between">
+      {/* <Grid container alignItems="center" justifyContent="space-between">
         <Grid item>
           <Typography variant="h5">Pipeline Health Report</Typography>
         </Grid>
@@ -47,7 +47,7 @@ export default function PipelineHealth() {
         <Box sx={{ pt: 1, pr: 2 }}>
           <PipelineHealthChart slot={slot} />
         </Box>
-      </MainCard>
+      </MainCard> */}
     </>
   );
 }

@@ -1,201 +1,3 @@
-// import PropTypes from 'prop-types';
-// // material-ui
-// import Link from '@mui/material/Link';
-// import Stack from '@mui/material/Stack';
-// import Table from '@mui/material/Table';
-// import TableBody from '@mui/material/TableBody';
-// import TableCell from '@mui/material/TableCell';
-// import TableContainer from '@mui/material/TableContainer';
-// import TableHead from '@mui/material/TableHead';
-// import TableRow from '@mui/material/TableRow';
-// import Typography from '@mui/material/Typography';
-// import Box from '@mui/material/Box';
-
-// // third-party
-// import { NumericFormat } from 'react-number-format';
-
-// // project import
-// import Dot from 'components/@extended/Dot';
-
-// function createData(tracking_no, name, carbs, protein) {
-//   return { tracking_no, name, carbs, protein };
-// }
-
-// const rows = [
-//   createData(84564564, 'SW Issue', 2, 12),
-//   createData(98764564, 'More than 50% tbs Down', 0, 18),
-//   createData(98756325, 'Env issue', 1, 9),
-//   createData(98652366, 'Cafy Issue', 1, 1),
-//   createData(13286564, 'Scripts issue', 1, 8),
-//   createData(98756325, 'Env issue', 1, 9),
-//   createData(98652366, 'Cafy Issue', 1, 1),
-//   createData(13286564, 'Scripts issue', 1, 8),
-// ];
-
-// function descendingComparator(a, b, orderBy) {
-//   if (b[orderBy] < a[orderBy]) {
-//     return -1;
-//   }
-//   if (b[orderBy] > a[orderBy]) {
-//     return 1;
-//   }
-//   return 0;
-// }
-
-// function getComparator(order, orderBy) {
-//   return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
-// }
-
-// function stableSort(array, comparator) {
-//   const stabilizedThis = array.map((el, index) => [el, index]);
-//   stabilizedThis.sort((a, b) => {
-//     const order = comparator(a[0], b[0]);
-//     if (order !== 0) {
-//       return order;
-//     }
-//     return a[1] - b[1];
-//   });
-//   return stabilizedThis.map((el) => el[0]);
-// }
-
-// const headCells = [
-//   {
-//     id: 'Tracking_no',
-//     align: 'left',
-//     disablePadding: false,
-//     label: 'Tracking Id.'
-//   },
-//   {
-//     id: 'name',
-//     align: 'left',
-//     disablePadding: true,
-//     label: 'Pipeline Impacting Issue'
-//   },
-//   {
-//     id: 'carbs',
-//     align: 'left',
-//     disablePadding: false,
-//     label: 'Status'
-//   },
-//   {
-//     id: 'protein',
-//     align: 'right',
-//     disablePadding: false,
-//     label: 'Issue Age(hr)'
-//   }
-// ];
-
-// // ==============================|| ORDER TABLE - HEADER ||============================== //
-
-// function PipelineTableHead({ order, orderBy }) {
-//   return (
-//     <TableHead>
-//       <TableRow>
-//         {headCells.map((headCell) => (
-//           <TableCell
-//             key={headCell.id}
-//             align={headCell.align}
-//             padding={headCell.disablePadding ? 'none' : 'normal'}
-//             sortDirection={orderBy === headCell.id ? order : false}
-//           >
-//             {headCell.label}
-//           </TableCell>
-//         ))}
-//       </TableRow>
-//     </TableHead>
-//   );
-// }
-
-// function OrderStatus({ status }) {
-//   let color;
-//   let title;
-
-//   switch (status) {
-//     case 0:
-//       color = 'warning';
-//       title = 'Pending';
-//       break;
-//     case 1:
-//       color = 'success';
-//       title = 'Approved';
-//       break;
-//     case 2:
-//       color = 'error';
-//       title = 'Rejected';
-//       break;
-//     default:
-//       color = 'primary';
-//       title = 'None';
-//   }
-
-//   return (
-//     <Stack direction="row" spacing={1} alignItems="center">
-//       <Dot color={color} />
-//       <Typography>{title}</Typography>
-//     </Stack>
-//   );
-// }
-
-// // ==============================|| ORDER TABLE ||============================== //
-
-// export default function PipelineTable() {
-//   const order = 'asc';
-//   const orderBy = 'tracking_no';
-
-//   return (
-//     <Box>
-//       <TableContainer
-//         sx={{
-//           width: '100%',
-//           overflowX: 'auto',
-//           position: 'relative',
-//           display: 'block',
-//           maxWidth: '100%',
-//           '& td, & th': { whiteSpace: 'nowrap' }
-//         }}
-//       >
-//         <Table aria-labelledby="tableTitle">
-//           <PipelineTableHead order={order} orderBy={orderBy} />
-//           <TableBody>
-//             {stableSort(rows, getComparator(order, orderBy)).map((row, index) => {
-//               const labelId = `enhanced-table-checkbox-${index}`;
-
-//               return (
-//                 <TableRow
-//                   hover
-//                   role="checkbox"
-//                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-//                   tabIndex={-1}
-//                   key={row.tracking_no}
-//                 >
-//                   <TableCell component="th" id={labelId} scope="row">
-//                     <Link color="secondary"> {row.tracking_no}</Link>
-//                   </TableCell>
-//                   <TableCell>{row.name}</TableCell>
-//                   {/* <TableCell align="right">{row.fat}</TableCell> */}
-//                   <TableCell>
-//                     <OrderStatus status={row.carbs} />
-//                   </TableCell>
-//                   <TableCell align="right">
-//                     <NumericFormat value={row.protein} displayType="text" thousandSeparator />
-//                   </TableCell>
-//                 </TableRow>
-//               );
-//             })}
-//           </TableBody>
-//         </Table>
-//       </TableContainer>
-//     </Box>
-//   );
-// }
-
-// PipelineTableHead.propTypes = { order: PropTypes.any, orderBy: PropTypes.string };
-
-// OrderStatus.propTypes = { status: PropTypes.number };
-
-
-
-
 import PropTypes from 'prop-types';
 // material-ui
 import Link from '@mui/material/Link';
@@ -228,6 +30,9 @@ const rows = [
   createData(98756325, 'Env issue', 1, 9),
   createData(98652366, 'Cafy Issue', 1, 1),
   createData(13286564, 'Scripts issue', 1, 8),
+  createData(13286564, 'Scripts issue', 1, 8),
+  createData(13286564, 'Scripts issue', 1, 8),
+  
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -343,10 +148,8 @@ export default function PipelineTable() {
   return (
     <Box
       sx={{
-        mt: 5, // Margin top to move the table up
+        mt: 0, // Reduce the margin top to move the table up
         mb: 1, // Margin bottom for spacing
-        // ml: 2, // Optional: margin left for alignment
-        // mr: 2, // Optional: margin right for alignment
         width: '100%',
         overflowX: 'auto',
         position: 'relative',

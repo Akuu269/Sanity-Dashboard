@@ -1,66 +1,3 @@
-// import { useState } from 'react';
-
-// // material-ui
-// import Grid from '@mui/material/Grid';
-// import MenuItem from '@mui/material/MenuItem';
-// import TextField from '@mui/material/TextField';
-// import Typography from '@mui/material/Typography';
-
-// // project import
-// import SalesChart from './SalesChart';
-
-// // sales report status
-// const status = [
-//   {
-//     value: 'today',
-//     label: 'Today'
-//   },
-//   {
-//     value: 'month',
-//     label: 'Week'
-//   },
-//   {
-//     value: 'year',
-//     label: 'Month'
-//   }
-// ];
-
-// // ==============================|| DEFAULT - SALES REPORT ||============================== //
-
-// export default function SaleReportCard() {
-//   const [value, setValue] = useState('today');
-
-//   return (
-//     <>
-//       <Grid container alignItems="center" justifyContent="space-between">
-//         <Grid item>
-//           <Typography variant="h5">Commit Sanity Report</Typography>
-//         </Grid>
-//         <Grid item>
-//           <TextField
-//             id="standard-select-currency"
-//             size="small"
-//             select
-//             value={value}
-//             onChange={(e) => setValue(e.target.value)}
-//             sx={{ '& .MuiInputBase-input': { py: 0.75, fontSize: '0.875rem' } }}
-//           >
-//             {status.map((option) => (
-//               <MenuItem key={option.value} value={option.value}>
-//                 {option.label}
-//               </MenuItem>
-//             ))}
-//           </TextField>
-//         </Grid>
-//       </Grid>
-//       <SalesChart />
-//     </>
-//   );
-// }
-
-
-
-
 import { useState } from 'react';
 
 // material-ui
@@ -133,6 +70,30 @@ const data = [
     TotalTBs: 100,
     TBsAvailable: 0,
     TBsDown: 10
+  },
+  {
+    Sanity: 'Core-Ap',
+    PassedCCTs: 95, // Percentage
+    FailedCCTs: 5, // Percentage
+    AnalysisPending: 4,
+    Error: 3,
+    Queue: 8,
+    Executing: 5,
+    TotalTBs: 100,
+    TBsAvailable: 0,
+    TBsDown: 10
+  },
+  {
+    Sanity: 'ASR9k-Ap',
+    PassedCCTs: 95, // Percentage
+    FailedCCTs: 5, // Percentage
+    AnalysisPending: 4,
+    Error: 3,
+    Queue: 8,
+    Executing: 5,
+    TotalTBs: 100,
+    TBsAvailable: 0,
+    TBsDown: 10
   }
 ];
 
@@ -143,11 +104,11 @@ export default function CommitSanityTable() {
 
   return (
     <>
-      <Grid container alignItems="center" justifyContent="space-between">
+      <Grid container alignItems="center" justifyContent="space-between"sx={{ mt: -77.5 }}>
         <Grid item>
           <Typography variant="h5">Commit Sanity Report</Typography>
         </Grid>
-        <Grid item>
+        {/* <Grid item>
           <TextField
             id="standard-select-currency"
             size="small"
@@ -162,10 +123,11 @@ export default function CommitSanityTable() {
               </MenuItem>
             ))}
           </TextField>
-        </Grid>
+        </Grid> */}
       </Grid>
 
-      <TableContainer component={Paper} sx={{ mt: 3 }}>
+      {/* Reduced the margin-top value */}
+      <TableContainer component={Paper} sx={{ mt: 2 }}>
         <Table>
           <TableHead>
             <TableRow>

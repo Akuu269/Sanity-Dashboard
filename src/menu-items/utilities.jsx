@@ -26,26 +26,27 @@ const utilities = {
   type: 'group',
   children: [
     {
-      id: 'util-typography',
-      title: 'Monitoring',
+      id: 'util-DDTSReport',
+      title: 'DDTS Report',
       type: 'item',
-      url: '/typography',
+      url: '/DDTSReport',
       icon: icons.FontSizeOutlined
     },
     {
       id: 'util-color',
-      title: 'Alert',
+      title: 'Incidents',
       type: 'item',
       url: '/color',
       icon: icons.BgColorsOutlined
     },
     {
       id: 'util-shadow',
-      title: 'Reports',
+      title: 'Alert',
       type: 'item',
       url: '/shadow',
       icon: icons.BarcodeOutlined
     }
+    
   ]
 };
 

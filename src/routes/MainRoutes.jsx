@@ -5,7 +5,7 @@ import Loadable from 'components/Loadable';
 import Dashboard from 'layout/Dashboard';
 
 const Color = Loadable(lazy(() => import('pages/component-overview/color')));
-const Typography = Loadable(lazy(() => import('pages/component-overview/typography')));
+const Typography = Loadable(lazy(() => import('pages/component-overview/DDTSReport')));
 const Shadow = Loadable(lazy(() => import('pages/component-overview/shadows')));
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/index')));
 
@@ -44,7 +44,7 @@ const MainRoutes = {
       element: <Shadow />
     },
     {
-      path: 'typography',
+      path: 'DDTSReport',
       element: <Typography />
     }
   ]
