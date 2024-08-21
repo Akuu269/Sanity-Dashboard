@@ -1,141 +1,332 @@
-import PropTypes from 'prop-types';
-// material-ui
+import * as React from 'react';
+import { useState } from 'react';
 import Card from '@mui/material/Card';
-import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { PieChart } from '@mui/x-charts/PieChart';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Modal from '@mui/material/Modal';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
 
-// project import
-import MainCard from 'components/MainCard';
-import ComponentWrapper from './ComponentWrapper';
-import ComponentSkeleton from './ComponentSkeleton';
-
-function ColorBox({ bgcolor, title, data, dark, main }) {
-  return (
-    <Card sx={{ '&.MuiPaper-root': { borderRadius: '0px' } }}>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          py: 2.5,
-          bgcolor,
-          color: dark ? 'grey.800' : '#ffffff',
-          border: main ? '1px dashed' : '1px solid transparent'
-        }}
-      >
-        {title && (
-          <Grid container justifyContent="space-around" alignItems="center">
-            <Grid item>
-              {data && (
-                <Stack spacing={0.75} alignItems="center">
-                  <Typography variant="subtitle2">{data.label}</Typography>
-                  <Typography variant="subtitle1">{data.color}</Typography>
-                </Stack>
-              )}
-            </Grid>
-            <Grid item>
-              <Typography variant="subtitle1" color="inherit">
-                {title}
-              </Typography>
-            </Grid>
-          </Grid>
-        )}
-      </Box>
-    </Card>
-  );
-}
-
-// ===============================|| COMPONENT - COLOR ||=============================== //
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+};
 
 export default function ComponentColor() {
+  const incidentData = [
+    { id: 0, value: 30, label: 'Open Incidents' },
+    { id: 1, value: 45, label: 'Closed Incidents' },
+    { id: 2, value: 25, label: 'In-Progress Incidents' },
+  ];
+
+  const totalIncidents = incidentData.reduce((acc, incident) => acc + incident.value, 0);
+
+  const incidents = [
+    {
+      id: 'INC001',
+      title: 'Lab Issue',
+      runsImpacted: 30,
+      status: 'Open',
+      age: '2 days',
+      description: 'Network failure due to unexpected load.',
+      assigneeGroup: 'SF Team',
+      assigneeEngineer: 'John Doe',
+      priority: 'High',
+      sanityName: 'SF Sanity',
+      consistency: 'Consistent',
+    },{
+      id: 'INC002',
+      title: 'Server Issue',
+      runsImpacted: 30,
+      status: 'Open',
+      age: '2 days',
+      description: 'Network failure due to unexpected load.',
+      assigneeGroup: 'SF Team',
+      assigneeEngineer: 'John Doe',
+      priority: 'High',
+      sanityName: 'SF Sanity',
+      consistency: 'Consistent',
+    },
+    {
+      id: 'INC003',
+      title: 'Cafy Issue Failure',
+      runsImpacted: 30,
+      status: 'Open',
+      age: '2 days',
+      description: 'Network failure due to unexpected load.',
+      assigneeGroup: 'SF Team',
+      assigneeEngineer: 'John Doe',
+      priority: 'High',
+      sanityName: 'SF Sanity',
+      consistency: 'Consistent',
+    },{
+      id: 'INC004',
+      title: 'Testbed issue',
+      runsImpacted: 30,
+      status: 'Open',
+      age: '2 days',
+      description: 'Network failure due to unexpected load.',
+      assigneeGroup: 'DNX Team',
+      assigneeEngineer: 'John Doe',
+      priority: 'High',
+      sanityName: 'DNX Sanity',
+      consistency: 'Consistent',
+    },{
+      id: 'INC005',
+      title: 'Ixia issue',
+      runsImpacted: 30,
+      status: 'Open',
+      age: '2 days',
+      description: 'Network failure due to unexpected load.',
+      assigneeGroup: 'ASR9k Team',
+      assigneeEngineer: 'John Doe',
+      priority: 'High',
+      sanityName: 'ASR9K Sanity',
+      consistency: 'Consistent',
+    },{
+      id: 'INC006',
+      title: 'Network Failure',
+      runsImpacted: 30,
+      status: 'Open',
+      age: '2 days',
+      description: 'Network failure due to unexpected load.',
+      assigneeGroup: 'SF Team',
+      assigneeEngineer: 'John Doe',
+      priority: 'High',
+      sanityName: 'SF Sanity',
+      consistency: 'Consistent',
+    },
+  ];
+
+  const [openIncidentModal, setOpenIncidentModal] = useState(false);
+  const [selectedIncident, setSelectedIncident] = useState(null);
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [newIncident, setNewIncident] = useState({
+    headline: '',
+    description: '',
+    assigneeGroup: '',
+    assigneeEngineer: '',
+    priority: '',
+    sanityName: '',
+    consistency: '',
+  });
+
+  const handleOpenIncidentModal = (incident) => {
+    setSelectedIncident(incident);
+    setOpenIncidentModal(true);
+  };
+
+  const handleCloseIncidentModal = () => {
+    setOpenIncidentModal(false);
+    setSelectedIncident(null);
+  };
+
+  const handleOpenCreateModal = () => setOpenCreateModal(true);
+
+  const handleCloseCreateModal = () => setOpenCreateModal(false);
+
+  const handleCreateIncident = () => {
+    console.log('Incident created:', newIncident);
+    handleCloseCreateModal();
+  };
+
+  const filteredIncidents = incidents.filter(
+    (incident) => incident.runsImpacted > 25
+  );
+
   return (
-    <ComponentSkeleton>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={6} md={4}>
-          <MainCard title="Primary Color">
-            <Stack>
-              <ColorBox bgcolor="primary.lighter" data={{ label: 'Blue-1', color: '#e6f7ff' }} title="primary.lighter" dark />
-              <ColorBox bgcolor="primary.100" data={{ label: 'Blue-2', color: '#bae7ff' }} title="primary[100]" dark />
-              <ColorBox bgcolor="primary.200" data={{ label: 'Blue-3', color: '#91d5ff' }} title="primary[200]" dark />
-              <ColorBox bgcolor="primary.light" data={{ label: 'Blue-4', color: '#69c0ff' }} title="primary.light" dark />
-              <ColorBox bgcolor="primary.400" data={{ label: 'Blue-5', color: '#40a9ff' }} title="primary[400]" />
-              <ColorBox bgcolor="primary.main" data={{ label: 'Blue-6', color: '#1890ff' }} title="primary.main" main />
-              <ColorBox bgcolor="primary.dark" data={{ label: 'Blue-7', color: '#096dd9' }} title="primary.dark" />
-              <ColorBox bgcolor="primary.700" data={{ label: 'Blue-8', color: '#0050b3' }} title="primary[700]" />
-              <ColorBox bgcolor="primary.darker" data={{ label: 'Blue-9', color: '#003a8c' }} title="primary.darker" />
-              <ColorBox bgcolor="primary.900" data={{ label: 'Blue-10', color: '#002766' }} title="primary.900" />
-            </Stack>
-          </MainCard>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <MainCard title="Secondary Color">
-            <Stack>
-              <ColorBox bgcolor="secondary.lighter" data={{ label: 'Grey-1', color: '#fafafa' }} title="secondary.lighter" dark />
-              <ColorBox bgcolor="secondary.100" data={{ label: 'Grey-2', color: '#f5f5f5' }} title="secondary[100]" dark />
-              <ColorBox bgcolor="secondary.200" data={{ label: 'Grey-3', color: '#f0f0f0' }} title="secondary[200]" dark />
-              <ColorBox bgcolor="secondary.light" data={{ label: 'Grey-4', color: '#d9d9d9' }} title="secondary.light" dark />
-              <ColorBox bgcolor="secondary.400" data={{ label: 'Grey-5', color: '#bfbfbf' }} title="secondary[400]" dark />
-              <ColorBox bgcolor="secondary.main" data={{ label: 'Grey-6', color: '#8c8c8c' }} title="secondary.main" main />
-              <ColorBox bgcolor="secondary.600" data={{ label: 'Grey-7', color: '#595959' }} title="secondary.600" />
-              <ColorBox bgcolor="secondary.dark" data={{ label: 'Grey-8', color: '#262626' }} title="secondary.dark" />
-              <ColorBox bgcolor="secondary.800" data={{ label: 'Grey-9', color: '#141414' }} title="secondary[800]" />
-              <ColorBox bgcolor="secondary.darker" data={{ label: 'Grey-10', color: '#000000' }} title="secondary.darker" />
-            </Stack>
-          </MainCard>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <MainCard title="Other Color">
-            <Stack>
-              <ColorBox bgcolor="secondary.A100" data={{ label: 'Grey-A1', color: '#ffffff' }} title="secondary.A100" dark />
-              <ColorBox bgcolor="secondary.A200" data={{ label: 'Grey-A2', color: '#434343' }} title="secondary.A200" />
-              <ColorBox bgcolor="secondary.A300" data={{ label: 'Grey-A3', color: '#1f1f1f' }} title="secondary.A300" />
-            </Stack>
-          </MainCard>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <MainCard title="Success Color">
-            <Stack>
-              <ColorBox bgcolor="success.lighter" data={{ label: 'Green-1', color: '#f6ffed' }} title="success.lighter" dark />
-              <ColorBox bgcolor="success.light" data={{ label: 'Green-4', color: '#95de64' }} title="success.light" dark />
-              <ColorBox bgcolor="success.main" data={{ label: 'Green-6', color: '#52c41a' }} title="success.main" main />
-              <ColorBox bgcolor="success.dark" data={{ label: 'Green-8', color: '#237804' }} title="success.dark" />
-              <ColorBox bgcolor="success.darker" data={{ label: 'Green-10', color: '#092b00' }} title="success.darker" />
-            </Stack>
-          </MainCard>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <MainCard title="Error Color">
-            <Stack>
-              <ColorBox bgcolor="error.lighter" data={{ label: 'Red-1', color: '#fff1f0' }} title="error.lighter" dark />
-              <ColorBox bgcolor="error.light" data={{ label: 'Red-4', color: '#ff7875' }} title="error.light" dark />
-              <ColorBox bgcolor="error.main" data={{ label: 'Red-6', color: '#f5222d' }} title="error.main" main />
-              <ColorBox bgcolor="error.dark" data={{ label: 'Red-8', color: '#a8071a' }} title="error.dark" />
-              <ColorBox bgcolor="error.darker" data={{ label: 'Red-10', color: '#5c0011' }} title="error.darker" />
-            </Stack>
-          </MainCard>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <MainCard title="Warning Color">
-            <Stack>
-              <ColorBox bgcolor="warning.lighter" data={{ label: 'Gold-1', color: '#fffbe6' }} title="warning.lighter" dark />
-              <ColorBox bgcolor="warning.light" data={{ label: 'Gold-4', color: '#ffd666' }} title="warning.light" dark />
-              <ColorBox bgcolor="warning.main" data={{ label: 'Gold-6', color: '#faad14' }} title="warning.main" main />
-              <ColorBox bgcolor="warning.dark" data={{ label: 'Gold-8', color: '#ad6800' }} title="warning.dark" />
-              <ColorBox bgcolor="warning.darker" data={{ label: 'Gold-10', color: '#613400' }} title="warning.darker" />
-            </Stack>
-          </MainCard>
-        </Grid>
-      </Grid>
-    </ComponentSkeleton>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        height: '100vh',
+        padding: 4,
+      }}
+    >
+      <Card
+        sx={{
+          padding: 3,
+          maxWidth: 750,
+          width: '100%',
+          boxShadow: 3,
+        }}
+      >
+        <Typography variant="h6" sx={{ fontWeight: 'bold' }} gutterBottom>
+          Incident Summary :
+        </Typography>
+        <Typography variant="h6" color="green" gutterBottom>
+          Total Incidents: {totalIncidents}
+        </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-start',
+          }}
+        >
+          <PieChart
+            series={[
+              {
+                data: incidentData,
+              },
+            ]}
+            width={700}
+            height={300}
+          />
+        </Box>
+      </Card>
+
+      <TableContainer component={Paper} sx={{ maxWidth: 650, marginLeft: 4 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: 2 }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Top Incidents </Typography>
+          <Button variant="contained" color="primary" onClick={handleOpenCreateModal}>
+            Create New Incident
+          </Button>
+        </Box>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Incident ID</TableCell>
+              <TableCell>Title</TableCell>
+              <TableCell>Runs Impacted</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Age</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredIncidents.slice(0, 10).map((incident) => (
+              <TableRow key={incident.id} onClick={() => handleOpenIncidentModal(incident)} style={{ cursor: 'pointer' }}>
+                <TableCell>{incident.id}</TableCell>
+                <TableCell>{incident.title}</TableCell>
+                <TableCell>{incident.runsImpacted}</TableCell>
+                <TableCell>{incident.status}</TableCell>
+                <TableCell>{incident.age}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* Incident Details Modal */}
+      <Modal
+        open={openIncidentModal}
+        onClose={handleCloseIncidentModal}
+        aria-labelledby="incident-details-title"
+        aria-describedby="incident-details-description"
+      >
+        <Box sx={style}>
+          {selectedIncident && (
+            <>
+              <Typography id="incident-details-title" variant="h6" component="h2">
+                {selectedIncident.title}
+              </Typography>
+              <Typography id="incident-details-description" sx={{ mt: 2 }}>
+                <strong>Description:</strong> {selectedIncident.description}
+              </Typography>
+              <Typography><strong>Assignee Group:</strong> {selectedIncident.assigneeGroup}</Typography>
+              <Typography><strong>Assignee Engineer:</strong> {selectedIncident.assigneeEngineer}</Typography>
+              <Typography><strong>Priority:</strong> {selectedIncident.priority}</Typography>
+              <Typography><strong>Sanity Name:</strong> {selectedIncident.sanityName}</Typography>
+              <Typography><strong>Consistency:</strong> {selectedIncident.consistency}</Typography>
+            </>
+          )}
+        </Box>
+      </Modal>
+
+      {/* Create Incident Modal */}
+      <Modal
+        open={openCreateModal}
+        onClose={handleCloseCreateModal}
+        aria-labelledby="create-incident-title"
+      >
+        <Box sx={style}>
+          <Typography id="create-incident-title" variant="h6" component="h2">
+            Create New Incident
+          </Typography>
+          <TextField
+            required
+            fullWidth
+            margin="normal"
+            label="Headline"
+            value={newIncident.headline}
+            onChange={(e) => setNewIncident({ ...newIncident, headline: e.target.value })}
+          />
+          <TextField
+            required
+            fullWidth
+            margin="normal"
+            label="Description"
+            value={newIncident.description}
+            onChange={(e) => setNewIncident({ ...newIncident, description: e.target.value })}
+          />
+          <TextField
+            required
+            fullWidth
+            margin="normal"
+            label="Assignee Group"
+            value={newIncident.assigneeGroup}
+            onChange={(e) => setNewIncident({ ...newIncident, assigneeGroup: e.target.value })}
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Assignee Engineer"
+            value={newIncident.assigneeEngineer}
+            onChange={(e) => setNewIncident({ ...newIncident, assigneeEngineer: e.target.value })}
+          />
+          <TextField
+            required
+            fullWidth
+            margin="normal"
+            label="Priority"
+            value={newIncident.priority}
+            onChange={(e) => setNewIncident({ ...newIncident, priority: e.target.value })}
+            select
+          >
+            <MenuItem value="High">High</MenuItem>
+            <MenuItem value="Medium">Medium</MenuItem>
+            <MenuItem value="Low">Low</MenuItem>
+          </TextField>
+          <TextField
+            required
+            fullWidth
+            margin="normal"
+            label="Sanity Name"
+            value={newIncident.sanityName}
+            onChange={(e) => setNewIncident({ ...newIncident, sanityName: e.target.value })}
+          />
+          <TextField
+            required
+            fullWidth
+            margin="normal"
+            label="Intermittent/Consistent"
+            value={newIncident.consistency}
+            onChange={(e) => setNewIncident({ ...newIncident, consistency: e.target.value })}
+            select
+          >
+            <MenuItem value="Intermittent">Intermittent</MenuItem>
+            <MenuItem value="Consistent">Consistent</MenuItem>
+          </TextField>
+          <Button variant="contained" color="primary" onClick={handleCreateIncident} sx={{ mt: 2 }}>
+            Create Incident
+          </Button>
+        </Box>
+      </Modal>
+    </Box>
   );
 }
-
-ColorBox.propTypes = {
-  bgcolor: PropTypes.string,
-  title: PropTypes.string,
-  data: PropTypes.object,
-  dark: PropTypes.bool,
-  main: PropTypes.bool
-};
