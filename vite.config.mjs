@@ -1,8 +1,8 @@
 // https://github.com/vitejs/vite/discussions/3448
-import path from 'path';
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import jsconfigPaths from 'vite-jsconfig-paths';
+// import path from 'path';
+// import { defineConfig } from 'vite';
+// import react from '@vitejs/plugin-react';
+// import jsconfigPaths from 'vite-jsconfig-paths';
 
 // ----------------------------------------------------------------------
 
@@ -41,9 +41,14 @@ import jsconfigPaths from 'vite-jsconfig-paths';
 
 
 
+import path from 'path';
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import jsconfigPaths from 'vite-jsconfig-paths';
+
 export default defineConfig({
   plugins: [react(), jsconfigPaths()],
-  base: '/',  // Or remove this line completely
+  base: '/',  // This should be adjusted based on your deployment path, e.g., '/free' if deploying under a sub-path
   define: {
     global: 'window'
   },
@@ -59,6 +64,14 @@ export default defineConfig({
       }
     ]
   },
+  build: {
+    rollupOptions: {
+      external: ['@mui/x-charts/PieChart'],  // Explicitly externalize if necessary
+    },
+    commonjsOptions: {
+      include: /node_modules/,  // Ensure CommonJS modules are properly handled
+    },
+  },
   server: {
     open: true,
     port: 3000
@@ -68,4 +81,4 @@ export default defineConfig({
     port: 3000
   }
 });
-;
+
