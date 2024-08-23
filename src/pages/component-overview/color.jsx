@@ -4,17 +4,11 @@ import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { PieChart } from '@mui/x-charts';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
+import IncidentsTable from './IncidentsTable'; // Import the IncidentsTable component
+import TopIncidentsTable from './TopIncidentsTable'; // Import TopIncidentsTable
 
 const style = {
   position: 'absolute',
@@ -49,7 +43,8 @@ export default function ComponentColor() {
       priority: 'High',
       sanityName: 'SF Sanity',
       consistency: 'Consistent',
-    },{
+    },
+    {
       id: 'INC002',
       title: 'Server Issue',
       runsImpacted: 30,
@@ -74,7 +69,8 @@ export default function ComponentColor() {
       priority: 'High',
       sanityName: 'SF Sanity',
       consistency: 'Consistent',
-    },{
+    },
+    {
       id: 'INC004',
       title: 'Testbed issue',
       runsImpacted: 30,
@@ -86,7 +82,8 @@ export default function ComponentColor() {
       priority: 'High',
       sanityName: 'DNX Sanity',
       consistency: 'Consistent',
-    },{
+    },
+    {
       id: 'INC005',
       title: 'Ixia issue',
       runsImpacted: 30,
@@ -98,7 +95,8 @@ export default function ComponentColor() {
       priority: 'High',
       sanityName: 'ASR9K Sanity',
       consistency: 'Consistent',
-    },{
+    },
+    {
       id: 'INC006',
       title: 'Network Failure',
       runsImpacted: 30,
@@ -145,82 +143,65 @@ export default function ComponentColor() {
     handleCloseCreateModal();
   };
 
-  const filteredIncidents = incidents.filter(
-    (incident) => incident.runsImpacted > 25
-  );
-
   return (
     <Box
       sx={{
         display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        height: '100vh',
-        padding: 4,
+        flexDirection: 'column',
+        padding: 1,
       }}
     >
-      <Card
+      {/* Container for Top Incidents Table and Incident Summary */}
+      <Box
         sx={{
-          padding: 3,
-          maxWidth: 750,
-          width: '100%',
-          boxShadow: 3,
+          display: 'flex',
+          justifyContent: 'space-between',
+          mb: 3,
         }}
       >
-        <Typography variant="h6" sx={{ fontWeight: 'bold' }} gutterBottom>
-          Incident Summary :
-        </Typography>
-        <Typography variant="h6" color="green" gutterBottom>
-          Total Incidents: {totalIncidents}
-        </Typography>
-        <Box
+        {/* Top Incidents Table */}
+        <TopIncidentsTable
+          incidents={incidents}
+          handleOpenIncidentModal={handleOpenIncidentModal}
+          handleOpenCreateModal={handleOpenCreateModal}
+        />
+
+        {/* Incident Summary */}
+        <Card
           sx={{
-            display: 'flex',
-            justifyContent: 'flex-start',
+            padding: 2,
+            maxWidth: 500,
+            width: '100%',
+            boxShadow: 3,
           }}
         >
-          <PieChart
-            series={[
-              {
-                data: incidentData,
-              },
-            ]}
-            width={700}
-            height={300}
-          />
-        </Box>
-      </Card>
+          <Typography variant="h5" sx={{ fontWeight: 'bold' }} gutterBottom>
+            Incident Summary
+          </Typography>
+          <Typography variant="h6" color="green" gutterBottom>
+            Total Incidents: {totalIncidents}
+          </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            <PieChart
+              series={[
+                {
+                  data: incidentData,
+                },
+              ]}
+              width={600}
+              height={300}
+            />
+          </Box>
+        </Card>
+      </Box>
 
-      <TableContainer component={Paper} sx={{ maxWidth: 650, marginLeft: 4 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: 2 }}>
-          <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Top Incidents </Typography>
-          <Button variant="contained" color="primary" onClick={handleOpenCreateModal}>
-            Create New Incident
-          </Button>
-        </Box>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Incident ID</TableCell>
-              <TableCell>Title</TableCell>
-              <TableCell>Runs Impacted</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Age</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredIncidents.slice(0, 10).map((incident) => (
-              <TableRow key={incident.id} onClick={() => handleOpenIncidentModal(incident)} style={{ cursor: 'pointer' }}>
-                <TableCell>{incident.id}</TableCell>
-                <TableCell>{incident.title}</TableCell>
-                <TableCell>{incident.runsImpacted}</TableCell>
-                <TableCell>{incident.status}</TableCell>
-                <TableCell>{incident.age}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {/* Incidents Table Component */}
+      <IncidentsTable />
 
       {/* Incident Details Modal */}
       <Modal
@@ -271,6 +252,8 @@ export default function ComponentColor() {
             fullWidth
             margin="normal"
             label="Description"
+            multiline
+            rows={4}
             value={newIncident.description}
             onChange={(e) => setNewIncident({ ...newIncident, description: e.target.value })}
           />
@@ -296,12 +279,7 @@ export default function ComponentColor() {
             label="Priority"
             value={newIncident.priority}
             onChange={(e) => setNewIncident({ ...newIncident, priority: e.target.value })}
-            select
-          >
-            <MenuItem value="High">High</MenuItem>
-            <MenuItem value="Medium">Medium</MenuItem>
-            <MenuItem value="Low">Low</MenuItem>
-          </TextField>
+          />
           <TextField
             required
             fullWidth
@@ -314,17 +292,19 @@ export default function ComponentColor() {
             required
             fullWidth
             margin="normal"
-            label="Intermittent/Consistent"
+            label="Consistency"
             value={newIncident.consistency}
             onChange={(e) => setNewIncident({ ...newIncident, consistency: e.target.value })}
-            select
-          >
-            <MenuItem value="Intermittent">Intermittent</MenuItem>
-            <MenuItem value="Consistent">Consistent</MenuItem>
-          </TextField>
-          <Button variant="contained" color="primary" onClick={handleCreateIncident} sx={{ mt: 2 }}>
-            Create Incident
-          </Button>
+          />
+          <Box sx={{ mt: 2 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleCreateIncident}
+            >
+              Create Incident
+            </Button>
+          </Box>
         </Box>
       </Modal>
     </Box>
